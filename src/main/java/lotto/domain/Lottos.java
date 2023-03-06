@@ -1,5 +1,6 @@
 package lotto.domain;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public class Lottos {
@@ -11,12 +12,13 @@ public class Lottos {
     }
 
     public LottoResult matchLottos(Lotto otherLotto) {
-        LottoResult lottoResult = new LottoResult();
+        EnumMap<LottoMatch, Integer> lottoResultStore = new EnumMap<>(LottoMatch.class);
         for (Lotto lotto : lottos) {
             int matchCount = lotto.getMatchLottoCount(otherLotto);
-            lottoResult.updateResult(matchCount);
+            LottoMatch lottoMatch = LottoMatch.findLottoMatch(matchCount);
+            lottoResultStore.put(lottoMatch, lottoResultStore.getOrDefault(lottoMatch, 0) + 1);
         }
-        return lottoResult;
+        return new LottoResult(lottoResultStore);
     }
 
     public int getLottosSize() {
