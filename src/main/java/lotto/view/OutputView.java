@@ -20,14 +20,14 @@ public class OutputView {
         result.append("---------").append('\n');
         for (LottoMatch lottoMatch : LottoMatch.values()) {
             result.append(lottoMatch.getMatchCount()).append("개 일치 (")
-                    .append(lottoMatch.getMoney()).append("원)- ")
+                    .append(lottoMatch.getMoney().getMoney()).append("원)- ")
                     .append(lottoResult.getMatchResult(lottoMatch.getMatchCount()))
                     .append("개").append('\n');
         }
         System.out.println(result);
     }
 
-    public void printLottoRate(Money money, int lottoMoney) {
+    public void printLottoRate(Money money, long lottoMoney) {
         StringBuilder result = new StringBuilder();
         result.append("총 수익률은 ");
         result.append(String.format("%.2f", money.getLottoRate(lottoMoney)));

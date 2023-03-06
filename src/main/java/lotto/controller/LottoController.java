@@ -11,7 +11,7 @@ public class LottoController {
 
     private static final InputView INPUT_VIEW = new InputView();
     private static final OutputView OUTPUT_VIEW = new OutputView();
-    private static final GenerateRandomNumber GENERATE_RANDOM_NUMBER = new GenerateRandomNumber();
+    private static final RandomNumberGenerator GENERATE_RANDOM_NUMBER = new RandomNumberGenerator();
 
     public static void main(String[] args) {
         Money buyMoney = new Money(INPUT_VIEW.inputBuyMoney());
@@ -42,7 +42,7 @@ public class LottoController {
 
     private static Lotto changeNumbersToLotto(List<Integer> numbers) {
         List<LottoNumber> lottoNumbers = new ArrayList<>();
-        numbers.forEach((number) -> lottoNumbers.add(new LottoNumber(number)));
+        numbers.forEach((number) -> lottoNumbers.add(LottoNumber.from(number)));
         return new Lotto(lottoNumbers);
     }
 
