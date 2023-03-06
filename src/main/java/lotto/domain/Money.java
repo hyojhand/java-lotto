@@ -2,8 +2,6 @@ package lotto.domain;
 
 public class Money {
 
-    private static final int LOTTO_PRICE = 1000;
-
     private final int money;
 
     public Money(int money) {
@@ -11,10 +9,18 @@ public class Money {
     }
 
     public int getBuyLottoCount() {
-        return money / LOTTO_PRICE;
+        return money / Lotto.LOTTO_PRICE;
     }
 
-    public double getLottoRate(int lottoMoney) {
+    public double getLottoRate(long lottoMoney) {
         return (double) lottoMoney / money;
+    }
+
+    public long calculateMoney(int count) {
+        return (long) money * count;
+    }
+
+    public int getMoney() {
+        return money;
     }
 }

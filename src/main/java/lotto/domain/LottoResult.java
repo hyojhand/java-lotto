@@ -1,29 +1,37 @@
 package lotto.domain;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
+import java.util.Objects;
 
 public class LottoResult {
 
-    private static final int MIN_MATCH_COUNT = 3;
-    private final Map<Integer, Integer> lottoResult = new HashMap<>();
+    private final EnumMap<LottoMatch, Integer> lottoResult;
 
-    public void updateResult(int matchCount) {
-        if (matchCount < MIN_MATCH_COUNT) {
-            return;
-        }
-
-        lottoResult.put(matchCount, lottoResult.getOrDefault(matchCount, 0) + 1);
+    public LottoResult(EnumMap<LottoMatch, Integer> lottoResult) {
+        this.lottoResult = lottoResult;
     }
 
     public int getMatchResult(int matchCount) {
-        return lottoResult.getOrDefault(matchCount, 0);
+        return lottoResult.getOrDefault(LottoMatch.findLottoMatch(matchCount), 0);
     }
 
-    public int getTotalLottoMoney() {
+    public long getTotalLottoMoney() {
         return Arrays.stream(LottoMatch.values())
-                .mapToInt(value -> value.getCalculateMoney(lottoResult.getOrDefault(value.getMatchCount(), 0)))
+                .mapToLong(value -> value.getCalculateMoney(lottoResult.getOrDefault(value, 0)))
                 .sum();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LottoResult that = (LottoResult) o;
+        return Objects.equals(lottoResult, that.lottoResult);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lottoResult);
     }
 }
