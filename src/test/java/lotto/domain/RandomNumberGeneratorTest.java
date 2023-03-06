@@ -12,14 +12,14 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GenerateRandomNumberTest {
+class RandomNumberGeneratorTest {
 
     private static final List<Integer> NUMBERS = IntStream.rangeClosed(1, 45).boxed().collect(Collectors.toList());
     private List<Integer> randomNumbers;
 
     @BeforeEach
     void setUp() {
-        GenerateRandomNumber generateRandomNumber = new GenerateRandomNumber();
+        RandomNumberGenerator generateRandomNumber = new RandomNumberGenerator();
         randomNumbers = generateRandomNumber.makeRandomNumbers();
     }
 
