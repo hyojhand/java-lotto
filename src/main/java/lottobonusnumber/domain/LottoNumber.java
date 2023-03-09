@@ -1,7 +1,6 @@
 package lottobonusnumber.domain;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -30,19 +29,6 @@ public class LottoNumber {
 
     private static boolean isOutOfBound(int number) {
         return number < MIN_LOTTO_NUMBER || number > MAX_LOTTO_NUMBER;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LottoNumber that = (LottoNumber) o;
-        return lottoNumber == that.lottoNumber;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(lottoNumber);
     }
 
     public int getLottoNumber() {
