@@ -19,8 +19,8 @@ class LottosTest {
 
     @BeforeEach
     void setUp() {
-        lotto = new Lotto(new LottoNumbers(Set.of(1, 2, 3, 4, 5, 6)));
-        lotto2 = new Lotto(new LottoNumbers(Set.of(1, 2, 3, 7, 8, 9)));
+        lotto = new Lotto(Set.of(1, 2, 3, 4, 5, 6));
+        lotto2 = new Lotto(Set.of(1, 2, 3, 7, 8, 9));
         lottos = new Lottos(List.of(lotto, lotto2));
     }
 
@@ -33,15 +33,13 @@ class LottosTest {
     @Test
     @DisplayName("로또 번호를 매치하는 테스트")
     void matchLottos_Test() {
-        Map<LottoMatch, Integer> lottoResultStore = new EnumMap<>(LottoMatch.class);
-        lottoResultStore.put(LottoMatch.THREE, 1);
-        lottoResultStore.put(LottoMatch.BONUS, 1);
+        Map<LottoMatch, Long> lottoResultStore = new EnumMap<>(LottoMatch.class);
+        lottoResultStore.put(LottoMatch.FIFTH, 1L);
+        lottoResultStore.put(LottoMatch.SECOND, 1L);
         LottoResult lottoResult = new LottoResult(lottoResultStore);
 
-        Lotto otherLotto = new Lotto(new LottoNumbers(Set.of(1, 2, 3, 4, 5, 45)));
-        LottoNumber bonusNumber = LottoNumber.from(6);
-
-        assertThat(lottos.matchLottos(otherLotto, bonusNumber)).isEqualTo(lottoResult);
+        WinLotto winLotto = new WinLotto(Set.of(1, 2, 3, 4, 5, 45), 6);
+        assertThat(lottos.matchLottos(winLotto)).isEqualTo(lottoResult);
     }
 
     @Test

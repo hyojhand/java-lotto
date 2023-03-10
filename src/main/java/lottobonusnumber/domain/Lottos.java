@@ -1,9 +1,9 @@
 package lottobonusnumber.domain;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Lottos {
 
@@ -13,16 +13,14 @@ public class Lottos {
         this.lottos = lotto;
     }
 
-    public LottoResult matchLottos(Lotto otherLotto, LottoNumber bonusNumber) {
-        Map<LottoMatch, Integer> lottoResultStore = new EnumMap<>(LottoMatch.class);
-
-        for (Lotto lotto : lottos) {
-            int matchCount = lotto.getMatchLottoCount(otherLotto);
-            boolean isBonus = lotto.isContainNumber(bonusNumber);
-
-            LottoMatch lottoMatch = LottoMatch.findLottoMatch(matchCount, isBonus);
-            lottoResultStore.put(lottoMatch, lottoResultStore.getOrDefault(lottoMatch, 0) + 1);
-        }
+    public LottoResult matchLottos(WinLotto winLotto) {
+        Map<LottoMatch, Long> lottoResultStore = lottos.stream()
+                .map(lotto -> {
+                    int matchCount = winLotto.getMatchLottoCount(lotto);
+                    boolean isBonus = winLotto.isContainBonusNumber(lotto);
+                    return LottoMatch.findLottoMatch(matchCount, isBonus);
+                })
+                .collect(Collectors.groupingBy(lottoMatch -> lottoMatch, Collectors.counting()));
 
         return new LottoResult(lottoResultStore);
     }
