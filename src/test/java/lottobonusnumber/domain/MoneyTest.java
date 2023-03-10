@@ -33,14 +33,14 @@ class MoneyTest {
     @DisplayName("구매한 로또 개수 테스트")
     void getBuyLottoCount_Test() {
         Money money = new Money(5000);
-        assertThat(money.getBuyLottoCount()).isEqualTo(5);
+        assertThat(money.getBuyCount(Lotto.LOTTO_PRICE)).isEqualTo(5);
     }
 
     @Test
     @DisplayName("수익률 구하는 테스트")
     void getLottoRate_Test() {
         Money money = new Money(10000);
-        assertThat(money.getLottoRate(new Money(5000))).isEqualTo(0.50);
+        assertThat(money.getProfitRate(new Money(5000))).isEqualTo(0.50);
     }
 
 

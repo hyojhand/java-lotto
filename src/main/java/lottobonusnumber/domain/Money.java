@@ -10,7 +10,7 @@ public class Money {
         this.money = money;
     }
 
-    public Money multiplyCountMoney(int count) {
+    public Money multiplyCountMoney(long count) {
         return new Money(money * count);
     }
 
@@ -18,11 +18,11 @@ public class Money {
         return new Money(money + otherMoney.money);
     }
 
-    public int getBuyLottoCount() {
-        return (int) money / Lotto.LOTTO_PRICE;
+    public int getBuyCount(int price) {
+        return (int) money / price;
     }
 
-    public double getLottoRate(Money resultMoney) {
+    public double getProfitRate(Money resultMoney) {
         return (double) resultMoney.money / money;
     }
 
