@@ -6,19 +6,19 @@ import java.util.Objects;
 
 public class LottoResult {
 
-    private final Map<LottoMatch, Integer> lottoResult;
+    private final Map<LottoMatch, Long> lottoResult;
 
-    public LottoResult(Map<LottoMatch, Integer> lottoResult) {
+    public LottoResult(Map<LottoMatch, Long> lottoResult) {
         this.lottoResult = lottoResult;
     }
 
-    public int getMatchResult(int matchCount, boolean isBonus) {
-        return lottoResult.getOrDefault(LottoMatch.findLottoMatch(matchCount, isBonus), 0);
+    public long getMatchResult(int matchCount, boolean isBonus) {
+        return lottoResult.getOrDefault(LottoMatch.findLottoMatch(matchCount, isBonus), 0L);
     }
 
     public Money getTotalResultMoney() {
         return Arrays.stream(LottoMatch.values())
-                .map(value -> value.getMultiplyCountMoney(lottoResult.getOrDefault(value, 0)))
+                .map(value -> value.getMultiplyCountMoney(lottoResult.getOrDefault(value, 0L)))
                 .reduce(new Money(0), Money::plusMoney);
     }
 
