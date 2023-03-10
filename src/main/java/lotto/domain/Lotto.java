@@ -1,46 +1,42 @@
 package lotto.domain;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Lotto {
 
-    protected static final int LOTTO_PRICE = 1000;
+    public static final int LOTTO_PRICE = 1000;
     private static final int LOTTO_NUMBER_SIZE = 6;
 
-    private final List<LottoNumber> lotto;
+    private final Set<LottoNumber> lotto;
 
-    public Lotto(List<LottoNumber> lotto) {
-        if (!isRightLottoSize(lotto.size())) {
-            throw new IllegalArgumentException("로또의 숫자는 6개 입니다");
+    public Lotto(Set<Integer> numbers) {
+        if (!isRightLottoSize(numbers)) {
+            throw new IllegalArgumentException("잘못된 로또 숫자 입니다");
         }
 
-        if (isDuplicate(lotto)) {
-            throw new IllegalArgumentException("로또의 숫자는 중복되면 안됩니다");
-        }
-
-        this.lotto = lotto;
+        this.lotto = mappingLottoNumber(numbers);
     }
 
     public int getMatchLottoCount(Lotto otherLotto) {
         return (int) lotto.stream()
-                .filter(otherLotto::isContain)
+                .filter(otherLotto::isContainNumber)
                 .count();
     }
 
-    private boolean isContain(LottoNumber number) {
+    public boolean isContainNumber(LottoNumber number) {
         return lotto.contains(number);
     }
 
-    private boolean isRightLottoSize(int size) {
-        return size == LOTTO_NUMBER_SIZE;
+    private boolean isRightLottoSize(Set<Integer> numbers) {
+        return numbers.size() == LOTTO_NUMBER_SIZE;
     }
 
-    private boolean isDuplicate(List<LottoNumber> lotto) {
-        Set<LottoNumber> numbers = new HashSet<>(lotto);
-        return numbers.size() != LOTTO_NUMBER_SIZE;
+    private Set<LottoNumber> mappingLottoNumber(Set<Integer> numbers) {
+        return numbers.stream()
+                .map(LottoNumber::from)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -56,7 +52,7 @@ public class Lotto {
         return Objects.hash(lotto);
     }
 
-    public List<LottoNumber> getLotto() {
+    public Set<LottoNumber> getLotto() {
         return lotto;
     }
 }
