@@ -4,13 +4,12 @@ import java.util.Arrays;
 
 public enum LottoMatch {
     DEFAULT(0, new Money(0)),
-    THREE(3, new Money(5_000)),
-    FOUR(4, new Money(50_000)),
-    FIVE(5, new Money(1_500_000)),
-    BONUS(5, new Money(30_000_000), true),
-    SIX(6, new Money(2_000_000_000));
+    FIFTH(3, new Money(5_000)),
+    FOURTH(4, new Money(50_000)),
+    THIRD(5, new Money(1_500_000)),
+    SECOND(5, new Money(30_000_000), true),
+    FIRST(6, new Money(2_000_000_000));
 
-    private static final int CAN_BONUS_MATCH_COUNT = 5;
     private final int matchCount;
     private final Money money;
     private boolean isBonus = false;
@@ -27,8 +26,8 @@ public enum LottoMatch {
     }
 
     public static LottoMatch findLottoMatch(int matchCount, boolean isBonus) {
-        if (matchCount == CAN_BONUS_MATCH_COUNT && isBonus) {
-            return LottoMatch.BONUS;
+        if (matchCount == LottoMatch.SECOND.matchCount && isBonus) {
+            return LottoMatch.SECOND;
         }
 
         return Arrays.stream(LottoMatch.values())
@@ -37,7 +36,7 @@ public enum LottoMatch {
                 .orElse(DEFAULT);
     }
 
-    public Money getMultiplyCountMoney(int count) {
+    public Money getMultiplyCountMoney(long count) {
         return money.multiplyCountMoney(count);
     }
 
