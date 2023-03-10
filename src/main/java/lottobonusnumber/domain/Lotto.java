@@ -1,23 +1,42 @@
 package lottobonusnumber.domain;
 
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Lotto {
 
-    protected static final int LOTTO_PRICE = 1000;
+    public static final int LOTTO_PRICE = 1000;
+    private static final int LOTTO_NUMBER_SIZE = 6;
 
-    private final LottoNumbers lottoNumbers;
+    private final Set<LottoNumber> lottoNumbers;
 
-    public Lotto(LottoNumbers lottoNumbers) {
-        this.lottoNumbers = lottoNumbers;
+    public Lotto(Set<Integer> numbers) {
+        if (!isRightLottoSize(numbers)) {
+            throw new IllegalArgumentException("로또의 숫자가 부족하거나 중복되었습니다");
+        }
+
+        this.lottoNumbers = mappingLottoNumber(numbers);
     }
 
     public int getMatchLottoCount(Lotto otherLotto) {
-        return lottoNumbers.matchLotto(otherLotto);
+        return (int) lottoNumbers.stream()
+                .filter(otherLotto::isContainNumber)
+                .count();
     }
 
     public boolean isContainNumber(LottoNumber lottoNumber) {
-        return lottoNumbers.isContainNumber(lottoNumber);
+        return lottoNumbers.contains(lottoNumber);
+    }
+
+    private Set<LottoNumber> mappingLottoNumber(Set<Integer> numbers) {
+        return numbers.stream()
+                .map(LottoNumber::from)
+                .collect(Collectors.toSet());
+    }
+
+    private boolean isRightLottoSize(Set<Integer> numbers) {
+        return numbers.size() == LOTTO_NUMBER_SIZE;
     }
 
     @Override
@@ -33,7 +52,7 @@ public class Lotto {
         return Objects.hash(lottoNumbers);
     }
 
-    public LottoNumbers getLottoNumbers() {
+    public Set<LottoNumber> getLottoNumbers() {
         return lottoNumbers;
     }
 }
