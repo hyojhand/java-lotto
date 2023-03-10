@@ -6,44 +6,48 @@ import lotto.view.OutputView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class LottoController {
 
-    private static final InputView INPUT_VIEW = new InputView();
-    private static final OutputView OUTPUT_VIEW = new OutputView();
-    private static final RandomNumberGenerator GENERATE_RANDOM_NUMBER = new RandomNumberGenerator();
+    private final InputView inputView;
+    private final OutputView outputView;
 
-    public static void main(String[] args) {
-        Money buyMoney = new Money(INPUT_VIEW.inputBuyMoney());
-        Lottos lottos = buyLottos(buyMoney.getBuyLottoCount());
-
-        OUTPUT_VIEW.printBuyLottoCount(lottos.getLottosSize());
-        OUTPUT_VIEW.printLottos(lottos);
-
-        List<Integer> winNumbers = INPUT_VIEW.inputWinLottoNumber();
-        Lotto winLotto = changeNumbersToLotto(winNumbers);
-
-        LottoResult lottoResult = lottos.matchLottos(winLotto);
-        OUTPUT_VIEW.printLottoResult(lottoResult);
-        OUTPUT_VIEW.printLottoRate(buyMoney, lottoResult.getTotalLottoMoney());
+    public LottoController(InputView inputView, OutputView outputView) {
+        this.inputView = inputView;
+        this.outputView = outputView;
     }
 
-    private static Lottos buyLottos(int buyCount) {
+    public static void main(String[] args) {
+        LottoController lottoController = new LottoController(new InputView(), new OutputView());
+        lottoController.gameStart();
+    }
+
+    public void gameStart() {
+        Money buyMoney = new Money(inputView.inputBuyMoney());
+        Lottos lottos = buyLottos(buyMoney.getBuyCount(Lotto.LOTTO_PRICE));
+
+        outputView.printBuyLottoCount(lottos.getLottosSize());
+        outputView.printLottos(lottos);
+
+        Set<Integer> winNumbers = inputView.inputWinLottoNumber();
+        int bonusNumber = inputView.inputBonusNumber();
+        WinLotto winLotto = new WinLotto(winNumbers, bonusNumber);
+
+        LottoResult lottoResult = lottos.matchLottos(winLotto);
+        outputView.printLottoResult(lottoResult);
+        outputView.printLottoRate(buyMoney, lottoResult.getTotalLottoMoney());
+    }
+
+    private Lottos buyLottos(int buyCount) {
         List<Lotto> lottos = new ArrayList<>();
 
         for (int i = 0; i < buyCount; i++) {
-            List<Integer> randomNumbers = GENERATE_RANDOM_NUMBER.makeRandomNumbers();
-            Lotto lotto = changeNumbersToLotto(randomNumbers);
+            Lotto lotto = RandomNumberGenerator.getInstance().makeRandomNumbers();
             lottos.add(lotto);
         }
 
         return new Lottos(lottos);
-    }
-
-    private static Lotto changeNumbersToLotto(List<Integer> numbers) {
-        List<LottoNumber> lottoNumbers = new ArrayList<>();
-        numbers.forEach((number) -> lottoNumbers.add(LottoNumber.from(number)));
-        return new Lotto(lottoNumbers);
     }
 
 }
