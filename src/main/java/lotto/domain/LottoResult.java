@@ -1,25 +1,25 @@
 package lotto.domain;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class LottoResult {
 
-    private final EnumMap<LottoMatch, Integer> lottoResult;
+    private final Map<LottoMatch, Long> lottoResult;
 
-    public LottoResult(EnumMap<LottoMatch, Integer> lottoResult) {
+    public LottoResult(Map<LottoMatch, Long> lottoResult) {
         this.lottoResult = lottoResult;
     }
 
-    public int getMatchResult(int matchCount) {
-        return lottoResult.getOrDefault(LottoMatch.findLottoMatch(matchCount), 0);
+    public long getMatchCount(int matchCount, boolean isBonus) {
+        return lottoResult.getOrDefault(LottoMatch.findLottoMatch(matchCount, isBonus), 0L);
     }
 
-    public long getTotalLottoMoney() {
+    public Money getTotalLottoMoney() {
         return Arrays.stream(LottoMatch.values())
-                .mapToLong(value -> value.getCalculateMoney(lottoResult.getOrDefault(value, 0)))
-                .sum();
+                .map(value -> value.multiplyCountMoney(lottoResult.getOrDefault(value, 0L)))
+                .reduce(new Money(0), Money::plusMoney);
     }
 
     @Override
