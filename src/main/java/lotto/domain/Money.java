@@ -1,26 +1,45 @@
 package lotto.domain;
 
+import java.util.Objects;
+
 public class Money {
 
-    private final int money;
+    private final long money;
 
-    public Money(int money) {
+    public Money(long money) {
         this.money = money;
     }
 
-    public int getBuyLottoCount() {
-        return money / Lotto.LOTTO_PRICE;
+    public int getBuyCount(int price) {
+        return (int) (money / price);
     }
 
-    public double getLottoRate(long lottoMoney) {
-        return (double) lottoMoney / money;
+    public double getProfitRate(Money resultMoney) {
+        return (double) resultMoney.money / money;
     }
 
-    public long calculateMoney(int count) {
-        return (long) money * count;
+    public Money plusMoney(Money otherMoney) {
+        return new Money(money + otherMoney.money);
     }
 
-    public int getMoney() {
+    public Money multiplyCountMoney(long count) {
+        return new Money(money * count);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money1 = (Money) o;
+        return money == money1.money;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(money);
+    }
+
+    public long getMoney() {
         return money;
     }
 }
