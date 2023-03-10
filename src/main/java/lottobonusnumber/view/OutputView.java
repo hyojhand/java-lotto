@@ -46,14 +46,14 @@ public class OutputView {
     public void printLottoRate(Money money, Money resultMoney) {
         StringBuilder result = new StringBuilder();
         result.append("총 수익률은 ");
-        result.append(String.format("%.2f", money.getLottoRate(resultMoney)));
+        result.append(String.format("%.2f", money.getProfitRate(resultMoney)));
         result.append("입니다.");
         System.out.println(result);
     }
 
     private void printLotto(Lotto lotto) {
         StringBuilder result = new StringBuilder();
-        for (LottoNumber number : lotto.getLottoNumbers().getLottoNumbers()) {
+        for (LottoNumber number : lotto.getLottoNumbers()) {
             result.append(number.getLottoNumber()).append(", ");
         }
 
