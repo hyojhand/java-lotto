@@ -5,13 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class LottoResultTest {
 
-    private EnumMap<LottoMatch, Integer> lottoResultStore;
+    private Map<LottoMatch, Long> lottoResultStore;
 
     @BeforeEach
     void setUp() {
@@ -19,22 +19,27 @@ class LottoResultTest {
     }
 
     @Test
-    @DisplayName("로또 매치 개수가 3개인 로또 테스트")
-    void getMatchResult_Three_Test() {
-        lottoResultStore.put(LottoMatch.THREE, 1);
+    @DisplayName("같은 결과를 가지면 같은 객체임을 테스트")
+    void lottoResult_SameObject_Test() {
+        lottoResultStore.put(LottoMatch.FIRST,1L);
         LottoResult lottoResult = new LottoResult(lottoResultStore);
-        assertAll(
-                () -> assertThat(lottoResult.getMatchResult(3)).isEqualTo(1),
-                () -> assertThat(lottoResult.getMatchResult(4)).isEqualTo(0)
-        );
+        assertThat(lottoResult).isEqualTo(new LottoResult(lottoResultStore));
+    }
+
+    @Test
+    @DisplayName("로또 결과의 매치되는 개수 테스트")
+    void getMatchCount_Test() {
+        lottoResultStore.put(LottoMatch.FIRST, 1L);
+        LottoResult lottoResult = new LottoResult(lottoResultStore);
+        assertThat(lottoResult.getMatchCount(6, false)).isEqualTo(1L);
     }
 
     @Test
     @DisplayName("로또 매치 총 금액 테스트")
     void getTotalLottoMoney_Test() {
-        lottoResultStore.put(LottoMatch.THREE, 1);
-        lottoResultStore.put(LottoMatch.FOUR, 1);
+        lottoResultStore.put(LottoMatch.FOURTH, 1L);
+        lottoResultStore.put(LottoMatch.FIFTH, 1L);
         LottoResult lottoResult = new LottoResult(lottoResultStore);
-        assertThat(lottoResult.getTotalLottoMoney()).isEqualTo(55000);
+        assertThat(lottoResult.getTotalLottoMoney()).isEqualTo(new Money(55000));
     }
 }

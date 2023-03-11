@@ -18,19 +18,31 @@ public class OutputView {
         StringBuilder result = new StringBuilder();
         result.append("당첨 통계").append('\n');
         result.append("---------").append('\n');
+
         for (LottoMatch lottoMatch : LottoMatch.values()) {
-            result.append(lottoMatch.getMatchCount()).append("개 일치 (")
-                    .append(lottoMatch.getMoney().getMoney()).append("원)- ")
-                    .append(lottoResult.getMatchResult(lottoMatch.getMatchCount()))
+            result.append(getMatchResultView(lottoMatch));
+            result.append("(").append(lottoMatch.getMoney().getMoney()).append("원)- ")
+                    .append(lottoResult.getMatchCount(lottoMatch.getMatchCount(), lottoMatch.isBonus()))
                     .append("개").append('\n');
         }
         System.out.println(result);
     }
 
-    public void printLottoRate(Money money, long lottoMoney) {
+    private String getMatchResultView(LottoMatch lottoMatch) {
+        StringBuilder result = new StringBuilder();
+        result.append(lottoMatch.getMatchCount()).append("개 일치");
+
+        if (lottoMatch.isBonus()) {
+            result.append(", 보너스 볼 일치");
+        }
+
+        return result.toString();
+    }
+
+    public void printLottoRate(Money money, Money lottoMoney) {
         StringBuilder result = new StringBuilder();
         result.append("총 수익률은 ");
-        result.append(String.format("%.2f", money.getLottoRate(lottoMoney)));
+        result.append(String.format("%.2f", money.getProfitRate(lottoMoney)));
         result.append("입니다.");
         System.out.println(result);
     }
