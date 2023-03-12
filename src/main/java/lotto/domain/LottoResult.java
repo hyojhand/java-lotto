@@ -19,7 +19,7 @@ public class LottoResult {
     public Money getTotalLottoMoney() {
         return Arrays.stream(LottoMatch.values())
                 .map(value -> value.multiplyCountMoney(lottoResult.getOrDefault(value, 0L)))
-                .reduce(new Money(0), Money::plusMoney);
+                .reduce(new Money(0), Money::plus);
     }
 
     @Override

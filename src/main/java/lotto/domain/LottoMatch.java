@@ -37,7 +37,7 @@ public enum LottoMatch {
     }
 
     public Money multiplyCountMoney(long count) {
-        return money.multiplyCountMoney(count);
+        return money.multiply(count);
     }
 
     public int getMatchCount() {
