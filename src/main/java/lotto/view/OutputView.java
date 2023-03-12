@@ -4,8 +4,11 @@ import lotto.domain.*;
 
 public class OutputView {
 
-    public void printBuyLottoCount(int count) {
-        System.out.println(count + "개를 구매했습니다.");
+    public void printBuyLottoCount(int manualLottoCount, int autoLottoCount) {
+        StringBuilder result = new StringBuilder();
+        result.append("수동으로 ").append(manualLottoCount).append("장, ");
+        result.append("자동으로 ").append(autoLottoCount).append("개를 구매했습니다.");
+        System.out.println(result);
     }
 
     public void printLottos(Lottos lottos) {
@@ -39,10 +42,10 @@ public class OutputView {
         return result.toString();
     }
 
-    public void printLottoRate(Money money, Money lottoMoney) {
+    public void printLottoRate(ProfitRate profitRate) {
         StringBuilder result = new StringBuilder();
         result.append("총 수익률은 ");
-        result.append(String.format("%.2f", money.getProfitRate(lottoMoney)));
+        result.append(profitRate.getRate());
         result.append("입니다.");
         System.out.println(result);
     }
