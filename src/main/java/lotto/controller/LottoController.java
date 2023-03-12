@@ -4,7 +4,6 @@ import lotto.domain.*;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -18,36 +17,39 @@ public class LottoController {
         this.outputView = outputView;
     }
 
-    public static void main(String[] args) {
-        LottoController lottoController = new LottoController(new InputView(), new OutputView());
-        lottoController.gameStart();
-    }
-
     public void gameStart() {
         Money buyMoney = new Money(inputView.inputBuyMoney());
-        Lottos lottos = buyLottos(buyMoney.getBuyCount(Lotto.LOTTO_PRICE));
 
-        outputView.printBuyLottoCount(lottos.getLottosSize());
+        int manualLottoCount = inputView.inputBuyManualLottoCount();
+        int autoLottoCount = (int) buyMoney.divide(new Money(Lotto.LOTTO_PRICE)) - manualLottoCount;
+
+        List<Lotto> manualLottos = inputView.inputManualLottoNumbers(manualLottoCount);
+        List<Lotto> buyLottos = buyAutoLottos(manualLottos, autoLottoCount);
+        Lottos lottos = new Lottos(buyLottos);
+
+        outputView.printBuyLottoCount(manualLottoCount, autoLottoCount);
         outputView.printLottos(lottos);
 
-        Set<Integer> winNumbers = inputView.inputWinLottoNumber();
-        int bonusNumber = inputView.inputBonusNumber();
-        WinLotto winLotto = new WinLotto(winNumbers, bonusNumber);
+        WinLotto winLotto = getWinLotto();
 
         LottoResult lottoResult = lottos.matchLottos(winLotto);
         outputView.printLottoResult(lottoResult);
-        outputView.printLottoRate(buyMoney, lottoResult.getTotalLottoMoney());
+        outputView.printLottoRate(new ProfitRate(lottoResult.getTotalLottoMoney().divide(buyMoney)));
     }
 
-    private Lottos buyLottos(int buyCount) {
-        List<Lotto> lottos = new ArrayList<>();
+    private WinLotto getWinLotto() {
+        Set<Integer> winNumbers = inputView.inputWinLottoNumber();
+        int bonusNumber = inputView.inputBonusNumber();
+        return new WinLotto(new Lotto(winNumbers), bonusNumber);
+    }
 
+    private List<Lotto> buyAutoLottos(List<Lotto> buyLottos, int buyCount) {
         for (int i = 0; i < buyCount; i++) {
             Lotto lotto = RandomNumberGenerator.getInstance().makeRandomNumbers();
-            lottos.add(lotto);
+            buyLottos.add(lotto);
         }
 
-        return new Lottos(lottos);
+        return buyLottos;
     }
 
 }
