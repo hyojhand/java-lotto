@@ -40,7 +40,7 @@ class LottosTest {
         lottoResultStore.put(LottoMatch.SECOND, 1L);
         LottoResult lottoResult = new LottoResult(lottoResultStore);
 
-        WinLotto winLotto = new WinLotto(Set.of(1, 2, 3, 4, 5, 10), 6);
+        WinLotto winLotto = new WinLotto(new Lotto(Set.of(1, 2, 3, 4, 5, 10)), 6);
         assertThat(lottos.matchLottos(winLotto)).isEqualTo(lottoResult);
     }
 
