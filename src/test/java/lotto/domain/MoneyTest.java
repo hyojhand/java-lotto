@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MoneyTest {
 
@@ -15,31 +16,27 @@ class MoneyTest {
     }
 
     @Test
-    @DisplayName("구매가능 개수 테스트")
-    void getBuyCount_Test() {
+    @DisplayName("나누기 테스트")
+    void divide_Test() {
         Money money = new Money(10000);
-        assertThat(money.getBuyCount(1000)).isEqualTo(10);
-    }
-
-    @Test
-    @DisplayName("수익률 결과 테스트")
-    void getProfitRate_Test() {
-        Money money = new Money(10000);
-        assertThat(money.getProfitRate(new Money(5000))).isEqualTo(0.50);
+        assertAll(
+                () -> assertThat(money.divide(new Money(1000))).isEqualTo(10),
+                () -> assertThat(money.divide(new Money(30000))).isEqualTo(0.33)
+        );
     }
 
     @Test
     @DisplayName("금액을 더한 결과 금액 테스트")
-    void plusMoney_Test() {
+    void plus_Test() {
         Money money = new Money(10000);
-        assertThat(money.plusMoney(new Money(5000))).isEqualTo(new Money(15000));
+        assertThat(money.plus(new Money(5000))).isEqualTo(new Money(15000));
     }
 
     @Test
     @DisplayName("수량만큼 곱한 결과 금액 테스트")
-    void multiplyCountMoney_Test() {
+    void multiply_Test() {
         Money money = new Money(5000);
-        assertThat(money.multiplyCountMoney(2)).isEqualTo(new Money(10000));
+        assertThat(money.multiply(2)).isEqualTo(new Money(10000));
     }
 
 }
