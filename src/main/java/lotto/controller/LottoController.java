@@ -40,7 +40,7 @@ public class LottoController {
     private WinLotto getWinLotto() {
         Set<Integer> winNumbers = inputView.inputWinLottoNumber();
         int bonusNumber = inputView.inputBonusNumber();
-        return new WinLotto(new Lotto(winNumbers), bonusNumber);
+        return new WinLotto(winNumbers, bonusNumber);
     }
 
     private List<Lotto> buyAutoLottos(List<Lotto> buyLottos, int buyCount) {
