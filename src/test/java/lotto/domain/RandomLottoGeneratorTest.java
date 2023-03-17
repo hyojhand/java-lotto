@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class RandomNumberGeneratorTest {
+class RandomLottoGeneratorTest {
 
     private static final int LOTTO_SIZE = 6;
     private static final List<Integer> NUMBERS = IntStream.rangeClosed(1, 45).boxed().collect(Collectors.toList());
@@ -21,7 +21,7 @@ class RandomNumberGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        lotto = RandomNumberGenerator.getInstance().makeRandomNumbers();
+        lotto = RandomLottoGenerator.getInstance().generateLotto();
     }
 
     @Test

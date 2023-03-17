@@ -6,6 +6,8 @@ import lotto.view.OutputView;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LottoController {
 
@@ -18,14 +20,16 @@ public class LottoController {
     }
 
     public void gameStart() {
-        Money buyMoney = new Money(inputView.inputBuyMoney());
+        int inputMoney = inputView.inputBuyMoney();
+        Money buyMoney = new Money(inputMoney);
 
         int manualLottoCount = inputView.inputBuyManualLottoCount();
-        int autoLottoCount = (int) buyMoney.divide(new Money(Lotto.LOTTO_PRICE)) - manualLottoCount;
+        int autoLottoCount = (int) buyMoney.divide(Lotto.LOTTO_PRICE) - manualLottoCount;
 
-        List<Lotto> manualLottos = inputView.inputManualLottoNumbers(manualLottoCount);
-        List<Lotto> buyLottos = buyAutoLottos(manualLottos, autoLottoCount);
-        Lottos lottos = new Lottos(buyLottos);
+        List<Set<Integer>> manualLottoNumbers = inputView.inputManualLottoNumbers(manualLottoCount);
+        List<Lotto> manualLottos = generateManualLottos(manualLottoNumbers);
+        List<Lotto> autoLottos = generateAutoLottos(RandomLottoGenerator.getInstance(), autoLottoCount);
+        Lottos lottos = mappingLottos(autoLottos, manualLottos);
 
         outputView.printBuyLottoCount(manualLottoCount, autoLottoCount);
         outputView.printLottos(lottos);
@@ -34,7 +38,24 @@ public class LottoController {
 
         LottoResult lottoResult = lottos.matchLottos(winLotto);
         outputView.printLottoResult(lottoResult);
-        outputView.printLottoRate(new ProfitRate(lottoResult.getTotalLottoMoney().divide(buyMoney)));
+        outputView.printLottoRate(new ProfitRate(lottoResult.getTotalLottoMoney().divide(inputMoney)));
+    }
+
+    private List<Lotto> generateManualLottos(List<Set<Integer>> lottoNumbers) {
+        return lottoNumbers.stream()
+                .map(numbers -> new ManualLottoGenerator(numbers).generateLotto())
+                .collect(Collectors.toList());
+    }
+
+    private List<Lotto> generateAutoLottos(LottoGenerator lottoGenerator, int count) {
+        return Stream.generate(lottoGenerator::generateLotto)
+                .limit(count)
+                .collect(Collectors.toList());
+    }
+
+    private Lottos mappingLottos(List<Lotto> lottos, List<Lotto> otherLottos) {
+        lottos.addAll(otherLottos);
+        return new Lottos(lottos);
     }
 
     private WinLotto getWinLotto() {
@@ -42,14 +63,4 @@ public class LottoController {
         int bonusNumber = inputView.inputBonusNumber();
         return new WinLotto(winNumbers, bonusNumber);
     }
-
-    private List<Lotto> buyAutoLottos(List<Lotto> buyLottos, int buyCount) {
-        for (int i = 0; i < buyCount; i++) {
-            Lotto lotto = RandomNumberGenerator.getInstance().makeRandomNumbers();
-            buyLottos.add(lotto);
-        }
-
-        return buyLottos;
-    }
-
 }

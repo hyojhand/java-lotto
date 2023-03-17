@@ -6,19 +6,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class RandomNumberGenerator {
+public class RandomLottoGenerator implements LottoGenerator {
 
     private static final List<Integer> NUMBERS = IntStream.rangeClosed(1, 45).boxed().collect(Collectors.toList());
-    private static final RandomNumberGenerator RANDOM_NUMBER_GENERATOR = new RandomNumberGenerator();
+    private static final RandomLottoGenerator RANDOM_NUMBER_GENERATOR = new RandomLottoGenerator();
 
-    private RandomNumberGenerator() {
+    private RandomLottoGenerator() {
     }
 
-    public static RandomNumberGenerator getInstance() {
+    public static RandomLottoGenerator getInstance() {
         return RANDOM_NUMBER_GENERATOR;
     }
 
-    public Lotto makeRandomNumbers() {
+    @Override
+    public Lotto generateLotto() {
         Collections.shuffle(NUMBERS);
 
         Set<Integer> numbers = NUMBERS.stream()
