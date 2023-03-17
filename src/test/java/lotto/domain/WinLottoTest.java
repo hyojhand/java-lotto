@@ -43,11 +43,4 @@ class WinLottoTest {
                 .hasMessageContaining("보너스 번호는 중복 될 수 업습니다");
     }
 
-    @Test
-    @DisplayName("당첨로또의 보너스 번호가 로또에 포함하는지 테스트")
-    void matchBonusNumber_Test() {
-        WinLotto winLotto = new WinLotto(Set.of(1, 2, 3, 4, 5, 6), 7);
-        assertThat(winLotto.matchBonusNumber(new Lotto(Set.of(7, 8, 9, 10, 11, 12)))).isTrue();
-    }
-
 }

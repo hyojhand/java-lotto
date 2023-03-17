@@ -23,7 +23,7 @@ public class WinLotto {
         return LottoMatch.findLottoMatch(matchCount, isBonus);
     }
 
-    public boolean matchBonusNumber(Lotto lotto) {
+    private boolean matchBonusNumber(Lotto lotto) {
         return lotto.isContainNumber(bonusNumber);
     }
 
