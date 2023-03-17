@@ -20,8 +20,8 @@ class MoneyTest {
     void divide_Test() {
         Money money = new Money(10000);
         assertAll(
-                () -> assertThat(money.divide(new Money(1000))).isEqualTo(10),
-                () -> assertThat(money.divide(new Money(30000))).isEqualTo(0.33)
+                () -> assertThat(money.divide(1000)).isEqualTo(10),
+                () -> assertThat(money.divide(30000)).isEqualTo(0.33)
         );
     }
 

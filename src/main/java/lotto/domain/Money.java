@@ -10,8 +10,8 @@ public class Money {
         this.money = money;
     }
 
-    public double divide(Money anotherMoney) {
-        return Math.floor((double) money / anotherMoney.money * 100) / 100;
+    public double divide(int number) {
+        return Math.floor((double) money / number * 100) / 100;
     }
 
     public Money plus(Money otherMoney) {
