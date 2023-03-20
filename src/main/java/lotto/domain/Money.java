@@ -10,19 +10,15 @@ public class Money {
         this.money = money;
     }
 
-    public int getBuyCount(int price) {
-        return (int) (money / price);
+    public double divide(int number) {
+        return Math.floor((double) money / number * 100) / 100;
     }
 
-    public double getProfitRate(Money resultMoney) {
-        return (double) resultMoney.money / money;
-    }
-
-    public Money plusMoney(Money otherMoney) {
+    public Money plus(Money otherMoney) {
         return new Money(money + otherMoney.money);
     }
 
-    public Money multiplyCountMoney(long count) {
+    public Money multiply(long count) {
         return new Money(money * count);
     }
 

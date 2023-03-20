@@ -15,12 +15,8 @@ public class Lottos {
 
     public LottoResult matchLottos(WinLotto winLotto) {
         Map<LottoMatch, Long> lottoResultStore = lottos.stream()
-                .map(lotto -> {
-                    int matchCount = winLotto.getMatchLottoCount(lotto);
-                    boolean isBonus = winLotto.matchBonusNumber(lotto);
-                    return LottoMatch.findLottoMatch(matchCount, isBonus);
-                }).collect(Collectors.groupingBy(lottoMatch -> lottoMatch, Collectors.counting()));
-
+                .map(winLotto::findLottoMatch)
+                .collect(Collectors.groupingBy(lottoMatch -> lottoMatch, Collectors.counting()));
         return new LottoResult(lottoResultStore);
     }
 
